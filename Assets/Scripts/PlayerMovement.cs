@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private PlayerInput input;
     private Gamepad gamepad;
+    public float originalMoveSpeed;
     public float moveSpeed;
     public float rotationSpeed;
     public Transform playerTarget;
@@ -21,12 +22,13 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         input = new PlayerInput();
+        moveSpeed = originalMoveSpeed;
     }
 
     void Update()
     {
-        Vector2 direction = Vector2.zero;
-        Vector2 orientation = Vector2.zero;
+        Vector3 direction = Vector3.zero;
+        Vector3 orientation = Vector3.zero;
 
         if (gamepad != null)
         {
@@ -38,14 +40,14 @@ public class PlayerMovement : MonoBehaviour
         RotatePlayerVision(orientation);
     }
 
-    void MovePlayerTarget(Vector2 direction)
+    void MovePlayerTarget(Vector3 direction)
     {
         direction.Normalize();
         Vector3 moveDirection = new Vector3(direction.x, 0f, direction.y);
         playerTarget.Translate(moveDirection * moveSpeed * Time.deltaTime);
     }
 
-    void RotatePlayerVision(Vector2 orientation)
+    void RotatePlayerVision(Vector3 orientation)
     {
         Quaternion targetRotation = Quaternion.LookRotation(new Vector3(orientation.x, 0f, orientation.y));
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
